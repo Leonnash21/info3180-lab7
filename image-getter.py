@@ -1,8 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
 import urlparse
+from app import app
+from flask import render_template, request, redirect, url_for, Flask, jsonify
 
-url = "https://www.walmart.com/ip/54649026"
+url = "https://www.amazon.com/Amazon-Echo-Bluetooth-Speaker-with-WiFi-Alexa/dp/B00X4WHP5E/ref=redir_mobile_desktop?_encoding=UTF8&ref_=ods_gw_ha_d_black"
 result = requests.get(url)
 soup = BeautifulSoup(result.text, "html.parser")
 
@@ -20,7 +22,15 @@ if thumbnail_spec and thumbnail_spec['href']:
     print ''
 
 
-image = """<img src="%s"><br />"""
-for img in soup.findAll("img", src=True):
-   print image % urlparse.urljoin(url, img["src"])
-   print ''
+@app.route('/images/', methods=['GET', 'POST'])
+def image_view():
+    imageList = []
+    
+    image = """<img src="%s"><br />"""
+    for img in soup.findAll("img", src=True):
+        if "sprite" not in img["src"]:
+            results= image % urlparse.urljoin(url, img["src"])
+            imageList.append(results)
+            if request.headers['Content-Type']=='application/json' or request.method == 'POST':
+                return jsonify(imageList)
+        return render_template('images.html', imageList=imageList)

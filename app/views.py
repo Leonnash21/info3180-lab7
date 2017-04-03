@@ -21,6 +21,37 @@ def home():
     return render_template('home.html')
 
 
+
+
+@app.route('/images/', methods=['GET', 'POST'])
+def image_dem():
+    imageList = []
+    url = "https://www.amazon.com/Amazon-Echo-Bluetooth-Speaker-with-WiFi-Alexa/dp/B00X4WHP5E/ref=redir_mobile_desktop?_encoding=UTF8&ref_=ods_gw_ha_d_black"
+    result = requests.get(url)
+    soup = BeautifulSoup.BeautifulSoup(result.text)
+    og_image = (soup.find('meta', property='og:image') or
+                    soup.find('meta', attrs={'name': 'og:image'}))
+    if og_image and og_image['content']:
+        return og_image['content']
+
+    thumbnail_spec = soup.find('link', rel='image_src')
+    if thumbnail_spec and thumbnail_spec['href']:
+        return thumbnail_spec['href']
+        
+    
+    
+    for img in soup.findAll("img", src=True):
+       if "sprite" not in img["src"]:
+           imageList.append( img["src"])
+           
+        
+            
+           
+    if request.headers['Content-Type']=='application/json' or request.method == 'POST':
+        
+        return render_template('images.html', imageList=imageList)
+    
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
