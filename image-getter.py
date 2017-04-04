@@ -31,6 +31,6 @@ def image_view():
         if "sprite" not in img["src"]:
             results= image % urlparse.urljoin(url, img["src"])
             imageList.append(results)
-            if request.headers['Content-Type']=='application/json' or request.method == 'POST':
+            if request.headers['Content-Type']=='application/json' or request.method == "POST":
                 return jsonify(imageList)
         return render_template('images.html', imageList=imageList)

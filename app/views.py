@@ -24,11 +24,11 @@ def home():
 
 
 @app.route('/images/', methods=['GET', 'POST'])
-def image_dem():
+def image_view():
     imageList = []
     url = "https://www.amazon.com/Amazon-Echo-Bluetooth-Speaker-with-WiFi-Alexa/dp/B00X4WHP5E/ref=redir_mobile_desktop?_encoding=UTF8&ref_=ods_gw_ha_d_black"
     result = requests.get(url)
-    soup = BeautifulSoup.BeautifulSoup(result.text)
+    soup = BeautifulSoup(result.text, "html.parser")
     og_image = (soup.find('meta', property='og:image') or
                     soup.find('meta', attrs={'name': 'og:image'}))
     if og_image and og_image['content']:

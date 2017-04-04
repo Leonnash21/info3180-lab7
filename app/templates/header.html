@@ -13,7 +13,7 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li {% if request.path == '/' %}class="active"{% endif %}><a href="{{ url_for('home') }}">Home</a></li>
-            <li {% if request.path == '/images/' %}class="active"><a href="{{ url_for('image_view') }}">Images</a></li>
+            <li {% if request.path == '/images/' %}class="active"{% endif %}><a href="{{ url_for('image_view') }}">Images</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
